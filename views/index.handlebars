@@ -1,0 +1,161 @@
+    
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+     <div class="container">
+	    <div class="navbar-header page-scroll">
+	        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+	            <span class="sr-only">Toggle navigation</span>
+	            <span class="icon-bar"></span>
+	            <span class="icon-bar"></span>
+	            <span class="icon-bar"></span>
+	        </button>
+	        <a class="navbar-brand page-scroll" href="#page-top">Portal</a>
+	    </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+	<div class="collapse navbar-collapse navbar-ex1-collapse">
+		<ul class="nav navbar-nav">
+		<!-- Hidden li included to remove active class from about link when scrolled up past about section -->
+			<li class="hidden">
+			    <a class="page-scroll" href="#page-top"></a>
+			</li>
+			<li>
+			    <a class="page-scroll" href="#about">Rejestracja</a>
+			</li>
+			<li>
+			    <a class="page-scroll" href="#services">Logowanie</a>
+			</li>
+			<li>
+			    <a class="page-scroll" href="#contact">Kontakt</a>
+			</li>
+		</ul>
+	</div>
+	<!-- /.navbar-collapse -->
+	</div>
+	<!-- /.container -->
+    </nav>
+
+    <!-- Intro -->
+    <section id="intro" class="intro-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1>Witaj na stronie</h1>
+                    <br>
+                    <a class="btn btn-default page-scroll" href="#about">Zarejestruj się...</a>
+                    <a class="btn btn-default page-scroll" href="#services">...lub Zaloguj</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Rejestracja-->
+    <section id="about" class="about-section">
+        <div class="container">
+                <div class="row text-center pad-top ">
+                    <div class="col-md-12">
+                  
+                    </div>
+                </div>
+                 <div class="row  pad-top">
+                       
+                        <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-10 col-xs-offset-1">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                <strong>   Rejestracja </strong>  
+                                    </div>
+                                    <div class="panel-body">
+                                        <form action="/register" method="post">
+       									 <br/>
+                                                <div class="form-group input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-circle-o-notch"  ></i></span>
+                                                    <input type="text" class="form-control" name="name" placeholder="Nazwa" />
+                                                </div>
+                                             <div class="form-group input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-tag"  ></i></span>
+                                                    <input type="text" class="form-control" name="adres" placeholder="Adres zamieszkania" />
+                                                </div>
+
+                                                 <div class="form-group input-group">
+                                                    <span class="input-group-addon">@</span>
+                                                    <input type="text" class="form-control" name="email" placeholder="Twój email" />
+                                                </div>
+                                              <div class="form-group input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-lock"  ></i></span>
+                                                    <input type="password" class="form-control" name="passwd" placeholder="Hasło" />
+                                                </div>
+                                             <div class="form-group input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-lock"  ></i></span>
+                                                    <input type="password" class="form-control" name="vpassword" placeholder="Powtórz hasło" />
+                                                </div>
+                                             <div class="form-group input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-tag"  ></i></span>
+                                                    <input type="file" class="form-control" name="avatar" placeholder="Zdjęcie profilowe" />
+                                                </div>                                     
+                                             <input type="submit" class="btn btn-success"  
+                                             value="Zarejestruj mnie!" >
+                                            <hr />
+                                            </form>
+                                    </div>
+                                   
+                                </div>
+                            </div>
+                        
+                        
+                </div>
+            </div>
+    </section>
+
+    <!-- Logowanie -->
+    <section id="services" class="services-section">
+        <div class="container">
+                <div class="row text-center pad-top ">
+                    <div class="col-md-12">
+                   
+                    </div>
+                </div>
+                 <div class="row  pad-top">
+                       
+                        <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-10 col-xs-offset-1">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                <strong>   Logowanie </strong>  
+                                    </div>
+                                    <div class="panel-body">
+                                        <form action="/login" method="post">
+        							<br/>
+                                                <div class="form-group input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-circle-o-notch"  ></i></span>
+                                                    <input type="text" class="form-control" name="name" placeholder="Nazwa" />
+                                                </div>
+                                              <div class="form-group input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-lock"  ></i></span>
+                                                    <input type="password" class="form-control" name="passwd" placeholder="Hasło" />
+                                                </div>                             
+                                             <input type="submit" class="btn btn-success"  
+                                             value="Zaloguj się!" >
+                                            <hr />
+                                            </form>
+                                    </div>
+                                   
+                                </div>
+                            </div>
+                        
+                        
+                </div>
+            </div>
+    </section>
+
+    <!-- Kontakt -->
+    <section id="contact" class="contact-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1>Kontakt</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
