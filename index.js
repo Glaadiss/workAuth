@@ -133,17 +133,17 @@ app.post('/login',function(req,res){
 			console.log(err);
 		}
 		if(!user){
-				console.log("2");
+			console.log("Nie znaleziono usera");
 			res.redirect('/');
 		}
 		else{
 			if(bcrypt.compareSync(req.body.passwd, user.passwd)){
-				console.log("4");
+				console.log("Zalogowano");
 				req.session.user = user;
 				res.redirect('/panel');
 			}
 			else{
-				console.log("3");
+				console.log("Niepoprawne haslo");
 				res.redirect('/');	
 			}
 		}
