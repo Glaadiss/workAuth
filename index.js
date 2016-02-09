@@ -3,7 +3,7 @@ var express = require('express');
 var app = express();
 var fs = require('fs');
 var nodemailer = require("nodemailer");
-var bodyParser = require('body-parser');
+var formidable = require('express-formidable');
 var mongoose = require('mongoose');
 var sessions = require('client-sessions');
 var bcrypt = require('bcryptjs');
@@ -11,7 +11,7 @@ var panel  = __dirname+'/views/panel';
 var expressHbs = require('express3-handlebars');
 var uristring =  process.env.MONGOLAB_URI || process.env.MONGOHQ_URL ||'mongodb://localhost/portal';
 		// Ustawienie portu dla aplikacji //
-app.set('port', (process.env.PORT || 3000));
+app.set('port', (process.env.PORT || 5000));
 
 		// Połączenie z bazą danych //
 mongoose.connect(uristring, function (err, res) {
@@ -30,7 +30,7 @@ var User = mongoose.model('User', new Schema({
 	passwd: String,
 	name: {type: String, unique: true},
 	adres: String, 
-	avatar: { data: Buffer, contentType: String },
+	avatar: String,
 	quiz: String
 }));
 
@@ -38,9 +38,7 @@ var User = mongoose.model('User', new Schema({
 app.engine('handlebars', expressHbs({defaultLayout:'main'}));
 app.set('view engine', 'handlebars');
 app.use(express.static(__dirname + '/public'));
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
+app.use(formidable.parse());
 
 		// zdefiniowanie sesjii, dla zalogowanych użytkowników //
 app.use(sessions({
@@ -81,13 +79,24 @@ function requireLogin(req,res,next){
 
 
 		// Routing //
-app.get('/',function(req, res){							 
-    res.render(__dirname + '/views/index');	//main file
+app.get('/',function(req, res){	
+	if(req.session.user){
+		res.render(panel, {
+			avatar: req.session.user.avatar,
+			email: req.session.user.email,
+			result: req.session.user.quiz
+		});		
+	}	
+	else{
+		res.render(__dirname + '/views/index');
+	}				 
+    
   });	
 
 app.get('/panel', requireLogin,  function(req,res){
 		//var taskMap = {};
 		res.render(panel, {
+			avatar: req.session.user.avatar,
 			email: req.session.user.email,
 			result: req.session.user.quiz
 		});
@@ -95,21 +104,58 @@ app.get('/panel', requireLogin,  function(req,res){
 })	
 
 
+function myImagee(avatar){
+	var oldPath = avatar.path;
+	var name = avatar.name;
+	var type = avatar.type;
+	var size = avatar.size;
+	var newPath = __dirname + '/upload'+oldPath+name;
+	if(type != 'image/jpeg' && type != 'image/png' && size >= 10000000){
+		return false;
+	}
+	else{
+		return newPath;
+	}
+}
+
 		// Wysłanie formularza rejestracji // 	
 	
 app.post('/register',function(req,res){
+	//console.log(req.body.avatar);
 		//zaszyfrowanie hasła//
 	var hash = bcrypt.hashSync(req.body.passwd, bcrypt.genSaltSync(10));
-	
+		// Dodanie zdjęcia profilowego //
+	var image  = req.body.avatar;
+	var myImage = myImagee(image);
+	if(myImage){
+		fs.readFile(image.path, function (err, data) {
+			fs.writeFile(myImage, data,  function(err) {
+			    if(err) {
+			        return console.log(err);
+			    }
+			    else{
+			    	user.avatar = myImage;
+			    	console.log("The file was saved!" + myImage);
+			    }
+			    
+			});
+		});
+	}
+	else{
+		myImage = 'Brak';
+	}
+
 	var user = new User({
 		email: req.body.email,
 		passwd: hash,
 		name: req.body.name,
 		adres: req.body.adres,
-		quiz: '0'
+		quiz: '0',
+		avatar: myImage
 	});
-	user.avatar.data = fs.readFileSync(req.body.avatar);
-	user.avatar.contentType = 'image/png';
+
+
+	
 
 				// Zapisanie użytkownika w bazie //
 	user.save(function (err){
@@ -133,17 +179,17 @@ app.post('/login',function(req,res){
 			console.log(err);
 		}
 		if(!user){
-				console.log("2");
+			console.log("Nie znaleziono usera");
 			res.redirect('/');
 		}
 		else{
 			if(bcrypt.compareSync(req.body.passwd, user.passwd)){
-				console.log("4");
+				console.log("Zalogowano");
 				req.session.user = user;
 				res.redirect('/panel');
 			}
 			else{
-				console.log("3");
+				console.log("Niepoprawne haslo");
 				res.redirect('/');	
 			}
 		}
@@ -157,6 +203,6 @@ app.get('/logout',function(req,res){
 
 
 		// Nasłuchiwanie portu //
-app.listen(3000, function(){
-  console.log('listening on *:'+ app.get('port'));
+app.listen(app.get('port'), function() {
+  console.log('Node app is running on port', app.get('port'));
 });
