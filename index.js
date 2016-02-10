@@ -11,14 +11,9 @@ var panel  = __dirname+'/views/panel';
 var notice = '';
 var S3FS = require('s3fs');
 
-var AWS_ACCESS_KEY = process.env.AWS_ACCESS_KEY;
-var AWS_SECRET_KEY = process.env.AWS_SECRET_KEY;
-console.log(AWS_ACCESS_KEY);
-var S3_BUCKET = process.env.S3_BUCKET;
-console.log(S3_BUCKET);
 var fsImpl = new S3FS('gladisbucket', {
-	accesKeyId: AWS_ACCES_KEY,
-	secretAccesKey: AWS_SECRET_KEY,
+	accesKeyId: process.env.AWS_ACCESS_KEY,
+	secretAccesKey: process.env.AWS_SECRET_KEY
 });
 
 
@@ -142,9 +137,6 @@ function myImagee(avatar){
 		// Wysłanie formularza rejestracji // 	
 	
 app.post('/register',function(req,res){
-
-	//client.authDriver(new Dropbox.AuthDriver.NodeServer(8191));
-	//console.log(req.body.avatar);
 		//zaszyfrowanie hasła//
 	var hash = bcrypt.hashSync(req.body.passwd, bcrypt.genSaltSync(10));
 		// Dodanie zdjęcia profilowego //
