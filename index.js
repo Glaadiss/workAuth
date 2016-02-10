@@ -8,6 +8,25 @@ var mongoose = require('mongoose');
 var sessions = require('client-sessions');
 var bcrypt = require('bcryptjs');
 var panel  = __dirname+'/views/panel';
+var notice = '';
+var S3FS = require('s3fs');
+
+var AWS_ACCESS_KEY = process.env.AWS_ACCESS_KEY;
+var AWS_SECRET_KEY = process.env.AWS_SECRET_KEY;
+console.log(AWS_ACCESS_KEY);
+var S3_BUCKET = process.env.S3_BUCKET;
+console.log(S3_BUCKET);
+var fsImpl = new S3FS('gladisbucket', {
+	accesKeyId: AWS_ACCES_KEY,
+	secretAccesKey: AWS_SECRET_KEY,
+});
+
+
+/*var Dropbox = require("dropbox");
+var client = new Dropbox.Client({
+    key: "6glsrqjujyer3p8",
+    secret: "g8m7anx88svfdjp"
+});*/
 var expressHbs = require('express3-handlebars');
 var uristring =  process.env.MONGOLAB_URI || process.env.MONGOHQ_URL ||'mongodb://localhost/portal';
 		// Ustawienie portu dla aplikacji //
@@ -81,15 +100,15 @@ function requireLogin(req,res,next){
 		// Routing //
 app.get('/',function(req, res){	
 	if(req.session.user){
-		res.render(panel, {
-			avatar: req.session.user.avatar,
-			email: req.session.user.email,
-			result: req.session.user.quiz
-		});		
+		res.redirect('/panel');	
 	}	
 	else{
-		res.render(__dirname + '/views/index');
-	}				 
+		res.render(__dirname + '/views/index', {
+			notice:notice
+		});
+	}	
+
+	notice = '';			 
     
   });	
 
@@ -98,8 +117,10 @@ app.get('/panel', requireLogin,  function(req,res){
 		res.render(panel, {
 			avatar: req.session.user.avatar,
 			email: req.session.user.email,
-			result: req.session.user.quiz
+			result: req.session.user.quiz,
+			notice: notice
 		});
+		notice = '';
 
 })	
 
@@ -109,7 +130,7 @@ function myImagee(avatar){
 	var name = avatar.name;
 	var type = avatar.type;
 	var size = avatar.size;
-	var newPath = __dirname + '/upload'+oldPath+name;
+	var newPath = oldPath+name;
 	if(type != 'image/jpeg' && type != 'image/png' && size >= 10000000){
 		return false;
 	}
@@ -121,6 +142,8 @@ function myImagee(avatar){
 		// Wysłanie formularza rejestracji // 	
 	
 app.post('/register',function(req,res){
+
+	//client.authDriver(new Dropbox.AuthDriver.NodeServer(8191));
 	//console.log(req.body.avatar);
 		//zaszyfrowanie hasła//
 	var hash = bcrypt.hashSync(req.body.passwd, bcrypt.genSaltSync(10));
@@ -129,7 +152,7 @@ app.post('/register',function(req,res){
 	var myImage = myImagee(image);
 	if(myImage){
 		fs.readFile(image.path, function (err, data) {
-			fs.writeFile(myImage, data,  function(err) {
+			fsImpl.writeFile(myImage, data,  function(err) {
 			    if(err) {
 			        return console.log(err);
 			    }

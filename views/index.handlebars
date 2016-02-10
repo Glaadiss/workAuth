@@ -86,11 +86,11 @@
 
                                                  <div class="form-group input-group">
                                                     <span class="input-group-addon">@</span>
-                                                    <input type="text" class="form-control" name="email" placeholder="Twój email" />
+                                                    <input type="text" class="form-control" name="email" placeholder="Twój email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" title="To nie jest adres email!"/>
                                                 </div>
                                               <div class="form-group input-group">
                                                     <span class="input-group-addon"><i class="fa fa-lock"  ></i></span>
-                                                    <input type="password" class="form-control" name="passwd" placeholder="Hasło" />
+                                                    <input type="password" class="form-control" name="passwd" placeholder="Hasło" pattern=".{6,}" title="Hasło musi zawierać przynajmniej 6 znaków"/>
                                                 </div>
                                              <div class="form-group input-group">
                                                     <span class="input-group-addon"><i class="fa fa-lock"  ></i></span>
