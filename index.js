@@ -9,7 +9,8 @@ var sessions = require('client-sessions');
 var bcrypt = require('bcryptjs');
 var panel  = __dirname+'/views/panel';
 var notice = '';
-var S3FS = require('s3fs');
+
+/*var S3FS = require('s3fs');
 
 var fsImpl = new S3FS('gladisbucket', {
 	accesKeyId: process.env.AWS_ACCESS_KEY,
@@ -17,7 +18,7 @@ var fsImpl = new S3FS('gladisbucket', {
 });
 
 
-/*var Dropbox = require("dropbox");
+var Dropbox = require("dropbox");
 var client = new Dropbox.Client({
     key: "6glsrqjujyer3p8",
     secret: "g8m7anx88svfdjp"
@@ -94,7 +95,7 @@ function requireLogin(req,res,next){
 
 		// Routing //
 app.get('/',function(req, res){	
-	if(req.session.user){
+	if(req.user){
 		res.redirect('/panel');	
 	}	
 	else{
@@ -109,15 +110,61 @@ app.get('/',function(req, res){
 
 app.get('/panel', requireLogin,  function(req,res){
 		//var taskMap = {};
+		var quiz = req.session.user.quiz;
+		var czyQuiz = false;
+		var bad = false;
+		var middle = false;
+		var good = false
+		if(quiz==-1){
+			czyQuiz = true;
+		}
+		if(quiz==1){
+			good = true;
+		}
+		else if(quiz ==2){
+			middle = true;
+		}
+		else if(quiz ==3){
+			bad = true;
+		}
 		res.render(panel, {
 			avatar: req.session.user.avatar,
 			email: req.session.user.email,
-			result: req.session.user.quiz,
+			result: czyQuiz,
+			good: good,
+			middle: middle,
+			bad: bad,
 			notice: notice
 		});
 		notice = '';
 
 })	
+
+app.post('/p', function(req,res){
+	var points = req.body.points;
+	var group;
+	points = parseInt(points);
+	if(points >= 0){
+		group=1;		//pełnosprawna 
+	}
+	if(points > 3){
+		group=2;		// średnio 
+	}
+	if(points > 7){
+		group=3;		//niepełnosprawna 
+	}
+
+	console.log(points);
+	User.findById(req.session.user.id, function(err, doc) {
+		doc.quiz = group;
+		doc.save(function(err) {
+			if (err) throw err;
+			console.log('User successfully updated!');
+		});
+	});
+	req.session.user.quiz = points;
+	res.redirect('/panel');
+})
 
 
 function myImagee(avatar){
@@ -125,7 +172,7 @@ function myImagee(avatar){
 	var name = avatar.name;
 	var type = avatar.type;
 	var size = avatar.size;
-	var newPath = oldPath+name;
+	var newPath = '/upload'+oldPath+name;
 	if(type != 'image/jpeg' && type != 'image/png' && size >= 10000000){
 		return false;
 	}
@@ -144,7 +191,7 @@ app.post('/register',function(req,res){
 	var myImage = myImagee(image);
 	if(myImage){
 		fs.readFile(image.path, function (err, data) {
-			fsImpl.writeFile(myImage, data,  function(err) {
+			fs.writeFile(__dirname +'/public'+ myImage, data,  function(err) {
 			    if(err) {
 			        return console.log(err);
 			    }
@@ -165,8 +212,8 @@ app.post('/register',function(req,res){
 		passwd: hash,
 		name: req.body.name,
 		adres: req.body.adres,
-		quiz: '0',
-		avatar: myImage
+		quiz: '-1',
+		avatar: '..'+myImage
 	});
 
 
@@ -218,6 +265,6 @@ app.get('/logout',function(req,res){
 
 
 		// Nasłuchiwanie portu //
-app.listen(app.get('port'), function() {
+app.listen(3001, function() {
   console.log('Node app is running on port', app.get('port'));
 });
