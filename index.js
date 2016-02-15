@@ -265,6 +265,6 @@ app.get('/logout',function(req,res){
 
 
 		// Nasłuchiwanie portu //
-app.listen(3001, function() {
+app.listen('port', function() {
   console.log('Node app is running on port', app.get('port'));
 });
