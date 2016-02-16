@@ -43,6 +43,7 @@ var ObjectId = Schema.ObjectId;
 var User = mongoose.model('User', new Schema({
 	email: {type: String, unique: true},
 	passwd: String,
+	pin: String,
 	name: {type: String, unique: true},
 	adres: String, 
 	avatar: String,
@@ -164,7 +165,25 @@ app.post('/p', function(req,res){
 	});
 	req.session.user.quiz = points;
 	res.redirect('/panel');
-})
+});
+
+app.post('/voice', function(req,res){
+	var pin = req.body.pin;
+	User.findOne({pin: pin},function(err,user){
+		if(err){
+			console.log(err);
+		}
+		if(!user){
+			console.log("Nie znaleziono usera o pinie " + pin + " ");
+			res.redirect('/');
+		}
+		else{
+				console.log("Zalogowano");
+				req.session.user = user;
+				res.redirect('/panel');
+		}
+	});	
+});
 
 
 function myImagee(avatar){
@@ -207,9 +226,11 @@ app.post('/register',function(req,res){
 		myImage = 'Brak';
 	}
 
+	var pin = Math.floor(Math.random()*1000000);
 	var user = new User({
 		email: req.body.email,
 		passwd: hash,
+		pin: pin,
 		name: req.body.name,
 		adres: req.body.adres,
 		quiz: '-1',
@@ -228,6 +249,7 @@ app.post('/register',function(req,res){
 			}
 		}
 		else{
+			notice+='Pin użytkownika do autoryzacji głosowej: '+ pin +' ';
 			res.redirect('/');
 		}
 	});

@@ -46,6 +46,10 @@
             <div class="row">
                 <div class="col-lg-12">
                     <h1 class="tagline">Witaj na stronie</h1>
+                        {{#if notice}}
+                        <h1 > {{notice}} </h1>
+                        {{/if}}
+
                     <br>
                     <a class="btn btn-default page-scroll" href="#about">Zarejestruj się...</a>
                     <a class="btn btn-default page-scroll" href="#services">...lub Zaloguj</a>
@@ -144,6 +148,12 @@
                                              value="Zaloguj się!" >
                                             <hr />
                                             </form>
+                                         <button class="btn btn-success" id="switchLog">Zaloguj się poprzez komendę głosową</button>   
+                                        <form id="form" action="/voice" method="post" enctype="multipart/form-data" hidden>
+                                             <input type="number" name="pin" id="pin" min="100000" max="999999">
+                                             <input type="submit" class="btn btn-success"  
+                                             value="Zakończ podawanie kodu" >                                            
+                                        </form>
                                     </div>
                                    
                                 </div>
@@ -165,20 +175,35 @@
         </div>
     </section>
 
-
+<script src="//cdnjs.cloudflare.com/ajax/libs/annyang/2.2.1/annyang.min.js"></script>
 <script>
-if (annyang) {
-  // Let's define a command.
-  var commands = {
-    'hello': function() { alert('Hello world!'); }
-  };
+$(document).ready(function(){
+    $("#switchLog").click(function() {
+      if (annyang) {
+        
+        annyang.setLanguage('pl');
+        //zdefiniowanie komendy
+        var commands = {
+            '*val': function(val) { 
+                var pin = val;
+                $("#pin").attr("value", pin);
+                $( "#form" ).submit();
+            }
+        };
 
-  // Add our commands to annyang
-  annyang.addCommands(commands);
 
-  // Start listening.
-  annyang.start();
-}
+        // Dodanie komend do annyang
+        annyang.addCommands(commands);
+
+        annyang.debug();
+        // start nasłuchwiania
+        annyang.start();
+        }
+    });
+});
+
+
+
 </script>
 
 
