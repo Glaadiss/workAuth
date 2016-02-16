@@ -169,13 +169,12 @@ app.post('/p', function(req,res){
 
 app.post('/voice', function(req,res){
 	var pin = req.body.pin;
-	pin = pin.replace(/\s+/g, '');
 	User.findOne({pin: pin},function(err,user){
 		if(err){
 			console.log(err);
 		}
 		if(!user){
-			console.log("Nie znaleziono usera o pinie " + pin + " ");
+			console.log('Nie znaleziono usera o pinie ' + pin + ' .');
 			res.redirect('/');
 		}
 		else{
