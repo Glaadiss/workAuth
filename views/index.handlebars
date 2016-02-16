@@ -186,6 +186,7 @@ $(document).ready(function(){
         var commands = {
             '*val': function(val) { 
                 var pin = val;
+                alert(pin);
                 pin = pin.replace(/\s+/g, '');
                 alert(pin);
                 $("#pin").attr("value", pin);
