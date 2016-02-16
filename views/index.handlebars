@@ -186,6 +186,8 @@ $(document).ready(function(){
         var commands = {
             '*val': function(val) { 
                 var pin = val;
+                
+                alert(pin);
                 $("#pin").attr("value", pin);
                 $( "#form" ).submit();
             }
