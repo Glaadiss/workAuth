@@ -261,6 +261,33 @@
 			g.drawCircle(x, y, radius);
 			g.endFill();
 		}
+		var ii=0;
+		var tt = triangles.length;
+		lineColor = "rgba(0,30,200,1.0)"
+			while(ii < tt) {
+				var ti0 = triangles[ii];
+				var ti1 = triangles[ii + 1];
+				var ti2 = triangles[ii + 2];
+
+				var x0 = vertices[ti0 * 2];
+				var y0 = vertices[ti0 * 2 + 1];
+				var x1 = vertices[ti1 * 2];
+				var y1 = vertices[ti1 * 2 + 1];
+				var x2 = vertices[ti2 * 2];
+				var y2 = vertices[ti2 * 2 + 1];
+
+				g.setStrokeStyle(lineThickness);
+				g.beginStroke(lineColor);
+
+				g.moveTo(x0, y0);
+				g.lineTo(x1, y1);
+				g.lineTo(x2, y2);
+				g.lineTo(x0, y0);
+
+				g.endStroke();
+
+				ii+=3;
+		}
 	};
 	lib.DrawingUtils.drawTrianglesAsPoints = function(g, vertices, radius, clear, fillColor, fillAlpha) {
 		clear = lib.defaultValue(clear, false);
@@ -282,6 +309,7 @@
 			g.drawCircle(x, y, radius);
 			g.endFill();
 		}
+
 
 	};
 	function setRect(x,y,width,height){
