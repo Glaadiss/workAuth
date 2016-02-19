@@ -282,6 +282,7 @@
 
 <script>
 $('#switchLog2').click(function(){
+    document.getElementById("fotoContent").style.display = "none";
      $('#services').html('<canvas id="_stage" width="700" height="400" style="position:absolute; left:0; z-index:0; float:left; margin:40px;">Your browser does not seem to support canvas elements.</canvas><div style="z-index:3; float:right; padding:20px; margin:20px;"><form id ="faceForm" action="/face" method="post" enctype="multipart/form-data"><input type="hidden" id="wsp1" name="wsp1" value=""><input type="hidden" id="wsp2" name="wsp2" value=""><input type="text" name="name" placeholder="Nazwa konta" style="padding:10px; margin:10px;" /></br> <input id="logIn" class="btn btn-success" value="Zaloguj się"></form></div>'
 
 
