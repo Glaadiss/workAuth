@@ -8,6 +8,24 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <title>Projekt</title>
+        <!-- face -->
+    <script src="../bin/js/lib/stats/stats.min.js"></script>
+    <script src="../bin/js/lib/createjs/easeljs-0.7.1.min.js"></script>
+    <script src="../bin/js/lib/createjs/preloadjs-0.4.1.min.js"></script>
+    <script src="../bin/js/lib/createjs/bitmapdata-1.0.1.min.js"></script>
+    <script>
+        //the acutal library object, mandatory
+        var nxtjs = {
+            memoryInitializerPrefixURL: "../bin/js/lib/brf/" // + BRF_NXT_v3.x.y_trial.js.mem is done in the other js file.
+        };
+    </script>
+    <script src="../bin/js/lib/brf/BRF_NXT_public_API.js"></script>
+    <script src="../bin/js/lib/brf/BRF_NXT_JS_TK200215_v3.0.16_trial.js"></script>
+    <script src="../bin/js/examples/ExampleBase.js"></script>
+    <script src="../bin/js/examples/ExampleFaceTracking.js"></script>
+        <!-- face -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js">
+    </script>
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/scrolling-nav.css" rel="stylesheet">
     <link href="../css/font-awesome.min.css" rel="stylesheet" />
@@ -15,31 +33,81 @@
     <link href="../css/style.css" rel="stylesheet" />  
     <link href="../css/business-frontpage.css" rel="stylesheet">
     <link href="../css/quiz.css" rel="stylesheet" type="text/css">
-    <!-- jQuery -->
-    <script src="../js/jquery.js"></script>
+    <link href="../css/demo.css" rel="stylesheet" type="text/css">
+    <script src="../js/webcam.js"></script>
+    <script src="../js/build/tracking-min.js"></script>
+    <script src="../js/build/data/face-min.js"></script>
+    <script src="../js/build/data/eye-min.js"></script>
+    <script src="../js/build/data/mouth-min.js"></script>
+    <script src="../js/quiz.js"></script>
+    <script type="text/javascript">
+                    function getWsp () {
+                    var x = window.rectX;
+                    var y = window.rectY;
+                    var width = window.rectW;
+                    var height = window.rectH;
+                    var eyeX = window.eyeX - x;
+                    var eyeY = window.eyeY - y;
+                    var eyeX2 = window.eyeX2 - x;
+                    var eyeY2 = window.eyeY2 - y;
+                    var noseX = window.noseX - x;
+                    var noseY = window.noseY - y;
+                    var noseX2 = window.noseX2 - x;
+                    var noseY2 = window.noseY2 - y;
+                    var midX = window.midX - x;
+                    var midY = window.midY - y;
+                    var eyeToEye = lineLength(eyeX, eyeY, eyeX2, eyeY2);
+                    var noseWidth = lineLength(noseX,noseY,noseX2, noseY2);
+                    var wsp1 = eyeToEye/width;
+                    var wsp2 = noseWidth/width;
+                   return {
+                        width: window.rectW,
+                        height: window.rectH,
+                        eyeX: window.eyeX,
+                        eyeY: window.eyeY,
+                        eyeX2: window.eyeX2,
+                        eyeY2: window.eyeY2,
+                        noseX: window.noseX,
+                        noseY: window.noseY,
+                        noseX2: window.noseX2,
+                        noseY2: window.noseX2,
+                        wsp1: wsp1,
+                        wsp2: wsp2
+                   }
+                }
+
+    </script>
+
+  <style>
+  .rect {
+    border: 2px solid #a64ceb;
+    left: -1000px;
+    position: absolute;
+    top: -1000px;
+  }
+  #img {
+
+
+  }
+  </style>
 </head>
 
 
-<body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
+<body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top" >
 
 
 
 
     {{{ body }}}
-
-
-
-
-    
-
-    <!-- Bootstrap Core JavaScript -->
+        <!-- Bootstrap Core JavaScript -->
     <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/script.js"></script>
     <!-- Scrolling Nav JavaScript -->
     <script src="../js/jquery.easing.min.js"></script>
     <script src="../js/scrolling-nav.js"></script>
     <script src="../js/annyang.js"></script>
-    <script src="../js/script.js"></script>
-    <script src="../js/quiz.js"></script>
+        
+
     <script>
     $(function(){
         $('body').jumaQuiz({

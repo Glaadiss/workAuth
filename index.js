@@ -9,20 +9,7 @@ var sessions = require('client-sessions');
 var bcrypt = require('bcryptjs');
 var panel  = __dirname+'/views/panel';
 var notice = '';
-
-/*var S3FS = require('s3fs');
-
-var fsImpl = new S3FS('gladisbucket', {
-	accesKeyId: process.env.AWS_ACCESS_KEY,
-	secretAccesKey: process.env.AWS_SECRET_KEY
-});
-
-
-var Dropbox = require("dropbox");
-var client = new Dropbox.Client({
-    key: "6glsrqjujyer3p8",
-    secret: "g8m7anx88svfdjp"
-});*/
+var goodNotice ='';
 var expressHbs = require('express3-handlebars');
 var uristring =  process.env.MONGOLAB_URI || process.env.MONGOHQ_URL ||'mongodb://localhost/portal';
 		// Ustawienie portu dla aplikacji //
@@ -32,6 +19,7 @@ app.set('port', (process.env.PORT || 5000));
 mongoose.connect(uristring, function (err, res) {
       if (err) {
       console.log ('ERROR connecting to: ' + uristring + '. ' + err);
+      notice='Nie można połączyć z bazą danych !!!';
       } else {
       console.log ('Succeeded connected to: ' + uristring);
       }
@@ -47,7 +35,9 @@ var User = mongoose.model('User', new Schema({
 	name: {type: String, unique: true},
 	adres: String, 
 	avatar: String,
-	quiz: String
+	quiz: String,
+	wsp1: String,
+	wsp2: String,
 }));
 
 		// Stworzenie widoków //
@@ -66,7 +56,9 @@ app.use(sessions({
 	secure: true,
 	ephermal: true
 }));
+		
 
+	// Sprawdzanie czy użytkownik jest zalogowany
 app.use(function(req,res,next){
 	if(req.session && req.session.user){
 		User.findOne({name: req.session.user.name}, function(err,user){
@@ -95,20 +87,25 @@ function requireLogin(req,res,next){
 
 
 		// Routing //
+
+		// Strona startowa
 app.get('/',function(req, res){	
 	if(req.user){
 		res.redirect('/panel');	
 	}	
 	else{
 		res.render(__dirname + '/views/index', {
-			notice:notice
+			notice:notice,
+			goodNotice:goodNotice
 		});
 	}	
 
-	notice = '';			 
+	notice = '';	
+	goodNotice ='';		 
     
   });	
 
+		// Strona dostępna po zalogowaniu
 app.get('/panel', requireLogin,  function(req,res){
 		//var taskMap = {};
 		var quiz = req.session.user.quiz;
@@ -138,9 +135,9 @@ app.get('/panel', requireLogin,  function(req,res){
 			notice: notice
 		});
 		notice = '';
-
+		goodNotice ='';	
 })	
-
+		// Przesłanie do bazy wyniku quizu
 app.post('/p', function(req,res){
 	var points = req.body.points;
 	var group;
@@ -167,14 +164,19 @@ app.post('/p', function(req,res){
 	res.redirect('/panel');
 });
 
+
+ 	// Funkcja odbierająca od klienta "Pin" do autoryzacji głosowej 
 app.post('/voice', function(req,res){
 	var pin = req.body.pin;
 	User.findOne({pin: pin},function(err,user){
 		if(err){
 			console.log(err);
+			res.redirect('/');
+			notice='Spróbuj jeszcze raz :(';
 		}
 		if(!user){
 			console.log('Nie znaleziono usera o pinie ' + pin + ' .');
+			notice='Nie znaleziono usera o podanym pinie';
 			res.redirect('/');
 		}
 		else{
@@ -186,46 +188,102 @@ app.post('/voice', function(req,res){
 });
 
 
-function myImagee(avatar){
-	var oldPath = avatar.path;
-	var name = avatar.name;
-	var type = avatar.type;
-	var size = avatar.size;
-	var newPath = '/upload'+oldPath+name;
-	if(type != 'image/jpeg' && type != 'image/png' && size >= 10000000){
-		return false;
+		// Weryfikacja poprzez porównanie twarzy z kamerki 
+app.post('/face', function(req,res){
+	var name = req.body.name;
+	var wsp1 = req.body.wsp1;
+	var wsp2 = req.body.wsp2;
+
+		//Pobranie proporcji twarzy 
+	if(wsp1 && wsp2){
+			wsp1=parseFloat(wsp1);
+			wsp2=parseFloat(wsp2);
+			wsp1=wsp1*10000;
+			wsp1=Math.floor(wsp1);
+			wsp2=wsp2*10000;
+			wsp2=Math.floor(wsp2);
 	}
 	else{
-		return newPath;
+			console.log('Nie da rady');
+			res.redirect('/');		
 	}
-}
+
+	User.findOne({name: name},function(err,user){
+		if(err){
+			console.log(err);
+			res.redirect('/');
+			notice='Spróbuj jeszcze raz :(';
+		}
+		if(!user){
+			console.log('Nie znaleziono usera o nazwie ' + name + ' .');
+			notice='Nie znaleziono usera o nazwie ' + name + ' .';
+			res.redirect('/');
+		}
+		else{
+			var wsp11 = user.wsp1;
+			var wsp22 = user.wsp2;
+			if(!wsp11 && !wsp22){
+					console.log('User nie ma fotki');
+					notice='Użytkownik nie posiada zdjęcia';
+					res.redirect('/');				
+			}
+			else{
+				wsp11 = wsp11.toString();
+				wsp22 = wsp22.toString();
+
+					//Porównywanie twarzy 
+				if(Math.abs(wsp11-wsp1)<200 && Math.abs(wsp22-wsp2)<200){
+					console.log("Witaj " + name);
+					console.log('Twoje proporcje: ' + wsp1 + ', '+ wsp2+ ' Wymagane proporcje: '+ wsp11 + ', '+ wsp22);
+					req.session.user = user;
+					res.redirect('/panel');
+				}
+				else{
+					console.log('To nie Ty! Twoje proporcje: ' + wsp1 + ', '+ wsp2+ ' Wymagane proporcje: '+ wsp11  + ', '+ wsp22);
+					notice='Proporcje nie zgadzają się :(';
+					res.redirect('/');
+				}				
+			}
+
+		}
+	});
+
+});
+
+
 
 		// Wysłanie formularza rejestracji // 	
 	
 app.post('/register',function(req,res){
-		//zaszyfrowanie hasła//
-	var hash = bcrypt.hashSync(req.body.passwd, bcrypt.genSaltSync(10));
-		// Dodanie zdjęcia profilowego //
-	var image  = req.body.avatar;
-	var myImage = myImagee(image);
-	if(myImage){
-		fs.readFile(image.path, function (err, data) {
-			fs.writeFile(__dirname +'/public'+ myImage, data,  function(err) {
-			    if(err) {
-			        return console.log(err);
-			    }
-			    else{
-			    	user.avatar = myImage;
-			    	console.log("The file was saved!" + myImage);
-			    }
-			    
-			});
-		});
-	}
-	else{
-		myImage = 'Brak';
-	}
 
+	var wsp1 = req.body.wsp1;
+	var wsp2 = req.body.wsp2;
+	if(wsp1 && wsp2){
+		wsp1=parseFloat(wsp1, 10);
+		wsp2=parseFloat(wsp2, 10);
+		wsp1=wsp1*10000;
+		wsp1=Math.floor(wsp1);
+		wsp2=wsp2*10000;
+		wsp2=Math.floor(wsp2);
+		wsp1=wsp1.toString();
+		wsp2=wsp2.toString();
+
+			// Dodanie zdjęcia profilowego //
+		var image  = req.body.avatar;
+		var newName = '/upload/tmp/'+req.body.name+'.jpeg';
+		fs.writeFile(__dirname +'/public'+newName, image, 'base64', function(err) {
+		    if(err) {
+		        return console.log(err);
+		    }
+			else{
+			    	user.avatar = newName;
+			    	console.log("The file was saved!" + newName);
+			}
+		});		
+	}
+			//zaszyfrowanie hasła//
+	var hash = bcrypt.hashSync(req.body.passwd, bcrypt.genSaltSync(10));
+			//Wygenerowaniu pinu do weryfikacji głosowej
 	var pin = Math.floor(Math.random()*1000000);
 	var user = new User({
 		email: req.body.email,
@@ -234,7 +292,9 @@ app.post('/register',function(req,res){
 		name: req.body.name,
 		adres: req.body.adres,
 		quiz: '-1',
-		avatar: '..'+myImage
+		avatar: '..'+newName,
+		wsp1: wsp1,
+		wsp2: wsp2
 	});
 
 
@@ -243,13 +303,13 @@ app.post('/register',function(req,res){
 				// Zapisanie użytkownika w bazie //
 	user.save(function (err){
 		if(err){
-			var err = ' Coś nie działa :C';
-			if(err.code === 11000){
-				var err = 'Niestety, ten adres email, lub nazwa są już zajęte';
-			}
+			console.log(err)
+			notice = 'Niestety, ten adres email, lub nazwa są już zajęte';
+			res.redirect('/');
 		}
 		else{
-			notice+='Pin użytkownika do autoryzacji głosowej: '+ pin +' ';
+			console.log('Zarejestrowano nowego usera: '+ req.body.name);
+			goodNotice+='Zarejestrowano pomyślnie! Twój pin do autoryzacji głosowej: '+ pin +' ';
 			res.redirect('/');
 		}
 	});
@@ -261,9 +321,12 @@ app.post('/login',function(req,res){
 	User.findOne({name: req.body.name},function(err,user){
 		if(err){
 			console.log(err);
+			notice='Spróbuj jeszcze raz :(';
+			res.redirect('/');
 		}
 		if(!user){
 			console.log("Nie znaleziono usera");
+			notice="Nie znaleziono usera";
 			res.redirect('/');
 		}
 		else{
@@ -274,6 +337,7 @@ app.post('/login',function(req,res){
 			}
 			else{
 				console.log("Niepoprawne haslo");
+				notice="Niepoprawne haslo";
 				res.redirect('/');	
 			}
 		}

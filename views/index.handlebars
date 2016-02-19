@@ -1,7 +1,9 @@
+
+        
     
-    <!-- Navigation -->
+     <!-- Navigation -->
     <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-     <div class="container">
+     <div class="container" >
 	    <div class="navbar-header page-scroll">
 	        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
 	            <span class="sr-only">Toggle navigation</span>
@@ -41,15 +43,26 @@
 
                     <!-- Image Background Page Header -->
     <!-- Note: The background image is set within the business-casual.css file. -->
+    
+
     <header class="business-header">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
+
+
+
                     <h1 class="tagline">Witaj na stronie</h1>
                         {{#if notice}}
-                        <h1 > {{notice}} </h1>
+                        <div class="alert alert-danger">
+                          <strong>Uwaga! </strong> {{notice}}
+                        </div>
                         {{/if}}
-
+                        {{#if goodNotice}}
+                        <div class="alert alert-success">
+                          <strong>Uwaga! </strong> {{goodNotice}}
+                        </div>
+                        {{/if}}
                     <br>
                     <a class="btn btn-default page-scroll" href="#about">Zarejestruj się...</a>
                     <a class="btn btn-default page-scroll" href="#services">...lub Zaloguj</a>
@@ -57,7 +70,7 @@
             </div>
         </div>
     </header>
-
+   
                     
     </section>
 
@@ -100,14 +113,107 @@
                                                     <span class="input-group-addon"><i class="fa fa-lock"  ></i></span>
                                                     <input type="password" class="form-control" name="vpasswd" placeholder="Powtórz hasło" />
                                                 </div>
-                                             <div class="form-group input-group">
+                                            
+                                             
+                                            <!-- <div class="form-group input-group">
                                                     <span class="input-group-addon"><i class="fa fa-tag"  ></i></span>
                                                     <input type="file" class="form-control" name="avatar" placeholder="Zdjęcie profilowe" />
-                                                </div>                                     
+                                                </div> 
+
+                                            -->
+                                                <input type="hidden" id="ws1" name="wsp1" value="">
+                                                <input type="hidden" id="ws2" name="wsp2" value="">                                               
+                                                 <input  id="mydata" type="hidden" name="avatar" value=""/> 
+
+                                                     
+                                                    <a id="photoo" class="btn btn-success"> Zrób zdjęcie profilowe!</a>
+                                                                                  
+
+                                                    <div id="fotoContent" style="display: none;">
+                                                     <div id="my_camera" 
+                                                     style="width:320px; height:240px;">
+                                                     </div>
+                                                     <a class="form-group input-group"
+                                                     href="javascript:void(take_snapshot())">Zrób zdjęcie</a>                                                
+                                                     <div id="my_result">
+                                                     </div>
+                                                    </div>       
+                                                 
+                                
+
+    <script>
+
+            $( "#photoo" ).on( "click", function() {
+                $('#forCanvas').html('<canvas id="_stage" width="1280" height="720" style="position:absolute;left:0px;top:0px; ">Your browser does not seem to support canvas elements.</canvas>');
+                initExample();
+                document.getElementById("fotoContent").style.display = "block";
+                Webcam.attach( '#my_camera' );
+            });
+      
+             lineLength = function(x, y, x0, y0){
+                return Math.sqrt((x -= x0) * x + (y -= y0) * y);
+            };       
+
+            
+
+            function take_snapshot() {
+
+
+
+
+                var face = getWsp();
+                if(!face.wsp1 || !face.wsp2){
+                    alert('Kamera nie zdążyła odczytać cech twojej twarzy, proszę ponownie ustawić się do zdjęcia i zrobić jeszcze raz :)');
+                }
+                else{
+                     console.log(' eyeToEye / width: ' + face.wsp1 + ' noseWidth/ width: ' + face.wsp2);
+                    Webcam.snap( function(data_uri) {
+                        
+                        var raw_image_data = data_uri.replace(/^data\:image\/\w+\;base64\,/, '');
+                        document.getElementById('mydata').value = raw_image_data;
+                        document.getElementById('ws1').value = face.wsp1;
+                        document.getElementById('ws2').value = face.wsp2;
+                        document.getElementById('my_result').innerHTML = '<img id="img" src="'+data_uri+'"/>';
+
+                        var img = document.getElementById('img');
+                        var tracker = new tracking.ObjectTracker(['face', 'eye', 'mouth']);
+                        tracker.setStepSize(1.7);
+                        tracking.track('#img', tracker);
+                        tracker.on('track', function(event) {
+                            event.data.forEach(function(rect) {
+                                window.plot(rect.x, rect.y, rect.width, rect.height);
+                            });
+                        });
+                        window.plot = function(x, y, w, h) {
+                            var rect = document.createElement('div');
+                            document.querySelector('#my_result').appendChild(rect);
+                            rect.classList.add('rect');
+                            rect.style.width = w + 'px';
+                            rect.style.height = h + 'px';
+                            rect.style.left = (img.offsetLeft + x) + 'px';
+                            rect.style.top = (img.offsetTop + y) + 'px';
+                        };
+
+
+                    });                     
+                }
+           
+            }
+
+
+
+
+    </script>
+
+   
+
+
                                              <input type="submit" class="btn btn-success"  
                                              value="Zarejestruj mnie!" >
                                             <hr />
                                             </form>
+
+
                                     </div>
                                    
                                 </div>
@@ -120,6 +226,8 @@
 
     <!-- Logowanie -->
     <section id="services" class="services-section">
+           <div id="forCanvas" style="display: none">
+       </div>
         <div class="container">
                 <div class="row text-center pad-top ">
                     <div class="col-md-12">
@@ -148,7 +256,14 @@
                                              value="Zaloguj się!" >
                                             <hr />
                                             </form>
-                                         <button class="btn btn-success" id="switchLog">Zaloguj się poprzez komendę głosową</button>   
+                                         <p><button class="btn btn-success" id="switchLog">Zaloguj się poprzez komendę głosową</button></p>
+
+                                        <p><button class="btn btn-success" id="switchLog2">Zaloguj się poprzez weryfikację twarzy</button></p>
+                                        <form id="form" action="/image" method="post" enctype="multipart/form-data" hidden>
+                                             <input type="text" name="pin" id="pin">
+                                             <input type="submit" class="btn btn-success"  
+                                             value="Zakończ podawanie kodu" >                                            
+                                        </form>                                        
                                         <form id="form" action="/voice" method="post" enctype="multipart/form-data" hidden>
                                              <input type="text" name="pin" id="pin">
                                              <input type="submit" class="btn btn-success"  
@@ -164,6 +279,36 @@
             </div>
     </section>
 
+
+<script>
+$('#switchLog2').click(function(){
+     $('#services').html('<canvas id="_stage" width="700" height="400" style="position:absolute; left:0; z-index:0; float:left; margin:40px;">Your browser does not seem to support canvas elements.</canvas><div style="z-index:3; float:right; padding:20px; margin:20px;"><form id ="faceForm" action="/face" method="post" enctype="multipart/form-data"><input type="hidden" id="wsp1" name="wsp1" value=""><input type="hidden" id="wsp2" name="wsp2" value=""><input type="text" name="name" placeholder="Nazwa konta" style="padding:10px; margin:10px;" /></br> <input id="logIn" class="btn btn-success" value="Zaloguj się"></form></div>'
+
+
+        );
+    
+    initExample(); 
+
+$( "#logIn" ).on( "click", function() {
+    var face = getWsp();
+    if(!face.wsp1 || !face.wsp2){
+        alert('Kamera nie zdążyła odczytać cech twojej twarzy, proszę ponownie usadowić się przed kamerą w celu weryfikacji.');
+    }
+    else{
+        document.getElementById('wsp1').value = face.wsp1;
+        document.getElementById('wsp2').value = face.wsp2;
+        $('#faceForm').submit();        
+    }  
+
+});
+
+
+})
+
+
+
+</script>
+
     <!-- Kontakt -->
     <section id="contact" class="contact-section">
         <div class="container">
@@ -178,6 +323,7 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/annyang/2.2.1/annyang.min.js"></script>
 <script>
 $(document).ready(function(){
+
     $("#switchLog").click(function() {
       if (annyang) {
         
@@ -201,12 +347,13 @@ $(document).ready(function(){
         // start nasłuchwiania
         annyang.start();
         }
+        else{
+            console.log('annyag nie dziala');
+        }
     });
 });
 
 
 
 </script>
-
-
 
