@@ -1,16 +1,26 @@
 		// Zdefiniowanie modułów node.js //
+		// framework na którym działa aplikacja
 var express = require('express');
 var app = express();
-var fs = require('fs');
-var nodemailer = require("nodemailer");
+		//moduł wspomagający zapisywanie zdjęć
+var fs = require('fs');  
+		//moduł do przechytywania informacji z formularzy
 var formidable = require('express-formidable');
+		//moduł do bazy danych
 var mongoose = require('mongoose');
+		// moduł do sesji
 var sessions = require('client-sessions');
+		// moduł do "haszowania" hasła
 var bcrypt = require('bcryptjs');
+		// ścieżka do strony dla zalogowanych
 var panel  = __dirname+'/views/panel';
+		// wartości przechowujące powiadomienia dla użytkowników
 var notice = '';
 var goodNotice ='';
+		// moduł do szablonów html
 var expressHbs = require('express3-handlebars');
+
+		// wartość przechowująca lokalizacje bazy danych
 var uristring =  process.env.MONGOLAB_URI || process.env.MONGOHQ_URL ||'mongodb://localhost/portal';
 		// Ustawienie portu dla aplikacji //
 app.set('port', (process.env.PORT || 5000));
@@ -42,8 +52,10 @@ var User = mongoose.model('User', new Schema({
 
 		// Stworzenie widoków //
 app.engine('handlebars', expressHbs({defaultLayout:'main'}));
+		// zdefiniowanie szablonu dla html
 app.set('view engine', 'handlebars');
 app.use(express.static(__dirname + '/public'));
+		// funkcja przechwytująca dane z formularza rejestracji i logowania
 app.use(formidable.parse());
 
 		// zdefiniowanie sesjii, dla zalogowanych użytkowników //
@@ -76,6 +88,7 @@ app.use(function(req,res,next){
 	}
 });
 
+	// funkcja optymalizująca sprawdzenie czy użytkownik jest zalogowany
 function requireLogin(req,res,next){
 	if(!req.user){
 		res.redirect('/');
@@ -94,6 +107,8 @@ app.get('/',function(req, res){
 		res.redirect('/panel');	
 	}	
 	else{
+
+		// Wyświetlenie strony startowej
 		res.render(__dirname + '/views/index', {
 			notice:notice,
 			goodNotice:goodNotice
@@ -107,7 +122,6 @@ app.get('/',function(req, res){
 
 		// Strona dostępna po zalogowaniu
 app.get('/panel', requireLogin,  function(req,res){
-		//var taskMap = {};
 		var quiz = req.session.user.quiz;
 		var czyQuiz = false;
 		var bad = false;
@@ -125,6 +139,8 @@ app.get('/panel', requireLogin,  function(req,res){
 		else if(quiz ==3){
 			bad = true;
 		}
+
+			// WYświetlenie widoku panelu dla zalogowanych
 		res.render(panel, {
 			avatar: req.session.user.avatar,
 			email: req.session.user.email,
@@ -153,6 +169,7 @@ app.post('/p', function(req,res){
 	}
 
 	console.log(points);
+		// Wyszukanie użytkownika, który zostanie przesunięty do danej grupy
 	User.findById(req.session.user.id, function(err, doc) {
 		doc.quiz = group;
 		doc.save(function(err) {
@@ -168,6 +185,8 @@ app.post('/p', function(req,res){
  	// Funkcja odbierająca od klienta "Pin" do autoryzacji głosowej 
 app.post('/voice', function(req,res){
 	var pin = req.body.pin;
+
+	//Wyszukanie w bazie użytkownika o podanym pinie
 	User.findOne({pin: pin},function(err,user){
 		if(err){
 			console.log(err);
@@ -208,6 +227,7 @@ app.post('/face', function(req,res){
 			res.redirect('/');		
 	}
 
+		// Wyszukanie w bazie użytkownika o podanej nazwie
 	User.findOne({name: name},function(err,user){
 		if(err){
 			console.log(err);
@@ -222,6 +242,7 @@ app.post('/face', function(req,res){
 		else{
 			var wsp11 = user.wsp1;
 			var wsp22 = user.wsp2;
+				// Sprawdzenie czy użytkownik dodał zdjęcie 
 			if(!wsp11 && !wsp22){
 					console.log('User nie ma fotki');
 					notice='Użytkownik nie posiada zdjęcia';
@@ -255,9 +276,20 @@ app.post('/face', function(req,res){
 		// Wysłanie formularza rejestracji // 	
 	
 app.post('/register',function(req,res){
+	if(!req.body.name || !req.body.email || !req.body.adres || !req.body.passwd || !req.body.vpasswd){
+		notice='Wszystkie pola muszą być wypełnione';
+		return res.redirect('/');
+
+	}
+	if(req.body.passwd!= req.body.vpasswd){
+		notice='Podane hasła nie są identyczne';
+		return res.redirect('/');
+	}
+
 
 	var wsp1 = req.body.wsp1;
 	var wsp2 = req.body.wsp2;
+			// Dodanie współczynników twarzy pozwalających na późniejszą weryfikację.
 	if(wsp1 && wsp2){
 		wsp1=parseFloat(wsp1, 10);
 		wsp2=parseFloat(wsp2, 10);
@@ -285,6 +317,8 @@ app.post('/register',function(req,res){
 	var hash = bcrypt.hashSync(req.body.passwd, bcrypt.genSaltSync(10));
 			//Wygenerowaniu pinu do weryfikacji głosowej
 	var pin = Math.floor(Math.random()*1000000);
+
+			//Utworzenie danych dla nowego użytkownika
 	var user = new User({
 		email: req.body.email,
 		passwd: hash,
@@ -330,7 +364,9 @@ app.post('/login',function(req,res){
 			res.redirect('/');
 		}
 		else{
-			if(bcrypt.compareSync(req.body.passwd, user.passwd)){
+
+			// w celach bezpieczeństwa "zahaszowanie" hasła 
+ 			if(bcrypt.compareSync(req.body.passwd, user.passwd)){
 				console.log("Zalogowano");
 				req.session.user = user;
 				res.redirect('/panel');

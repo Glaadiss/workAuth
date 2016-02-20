@@ -61,7 +61,7 @@
                         {{/if}}
                         {{#if goodNotice}}
                         <div class="alert alert-success">
-                          <strong>Uwaga! </strong> {{goodNotice}}
+                          <strong>Yeaah! </strong> {{goodNotice}}
                         </div>
                         {{/if}}
                     <br>
@@ -78,72 +78,65 @@
     <!-- Rejestracja-->
     <section id="about" class="about-section">
         <div class="container">
-                <div class="row text-center pad-top ">
-                    <div class="col-md-12">
-                  
-                    </div>
+            <div class="row text-center pad-top ">
+                <div class="col-md-12">
+              
                 </div>
-                 <div class="row  pad-top">
-                       
-                        <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-10 col-xs-offset-1">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                <strong>   Rejestracja </strong>  
-                                    </div>
-                                    <div class="panel-body">
-                                        <form action="/register" method="post" enctype="multipart/form-data">
-       									 <br/>
-                                                <div class="form-group input-group">
-                                                    <span class="input-group-addon"><i class="fa fa-circle-o-notch"  ></i></span>
-                                                    <input type="text" class="form-control" name="name" placeholder="Nazwa" />
-                                                </div>
-                                             <div class="form-group input-group">
-                                                    <span class="input-group-addon"><i class="fa fa-tag"  ></i></span>
-                                                    <input type="text" class="form-control" name="adres" placeholder="Adres zamieszkania" />
-                                                </div>
+            </div>
+             <div class="row  pad-top">
+                   
+                <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-10 col-xs-offset-1">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                    <strong>   Rejestracja </strong>  
+                        </div>
+                        <div class="panel-body">
+                            <form action="/register" method="post" enctype="multipart/form-data">
+							 <br/>
+                                <div class="form-group input-group">
+                                    <span class="input-group-addon"><i class="fa fa-circle-o-notch"  ></i></span>
+                                    <input type="text" class="form-control" name="name" placeholder="Nazwa" />
+                                </div>
+                             <div class="form-group input-group">
+                                    <span class="input-group-addon"><i class="fa fa-tag"  ></i></span>
+                                    <input type="text" class="form-control" name="adres" placeholder="Adres zamieszkania" />
+                                </div>
 
-                                                 <div class="form-group input-group">
-                                                    <span class="input-group-addon">@</span>
-                                                    <input type="text" class="form-control" name="email" placeholder="Twój email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" title="To nie jest adres email!"/>
-                                                </div>
-                                              <div class="form-group input-group">
-                                                    <span class="input-group-addon"><i class="fa fa-lock"  ></i></span>
-                                                    <input type="password" class="form-control" name="passwd" placeholder="Hasło" pattern=".{6,}" title="Hasło musi zawierać przynajmniej 6 znaków"/>
-                                                </div>
-                                             <div class="form-group input-group">
-                                                    <span class="input-group-addon"><i class="fa fa-lock"  ></i></span>
-                                                    <input type="password" class="form-control" name="vpasswd" placeholder="Powtórz hasło" />
-                                                </div>
-                                            
-                                             
-                                            <!-- <div class="form-group input-group">
-                                                    <span class="input-group-addon"><i class="fa fa-tag"  ></i></span>
-                                                    <input type="file" class="form-control" name="avatar" placeholder="Zdjęcie profilowe" />
-                                                </div> 
+                                 <div class="form-group input-group">
+                                    <span class="input-group-addon">@</span>
+                                    <input type="text" class="form-control" name="email" placeholder="Twój email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" title="To nie jest adres email!"/>
+                                </div>
+                              <div class="form-group input-group">
+                                    <span class="input-group-addon"><i class="fa fa-lock"  ></i></span>
+                                    <input type="password" class="form-control" name="passwd" placeholder="Hasło" pattern=".{6,}" title="Hasło musi zawierać przynajmniej 6 znaków"/>
+                                </div>
+                             <div class="form-group input-group">
+                                    <span class="input-group-addon"><i class="fa fa-lock"  ></i></span>
+                                    <input type="password" class="form-control" name="vpasswd" placeholder="Powtórz hasło" pattern=".{6,}" title="Hasło musi zawierać przynajmniej 6 znaków" />
+                                </div>
+                            
+                                <input type="hidden" id="ws1" name="wsp1" value="">
+                                <input type="hidden" id="ws2" name="wsp2" value="">                                               
+                                 <input  id="mydata" type="hidden" name="avatar" value=""/> 
 
-                                            -->
-                                                <input type="hidden" id="ws1" name="wsp1" value="">
-                                                <input type="hidden" id="ws2" name="wsp2" value="">                                               
-                                                 <input  id="mydata" type="hidden" name="avatar" value=""/> 
+                                     
+                                    <a id="photoo" class="btn btn-success"> Zrób zdjęcie profilowe!</a>
+                                                                  
 
-                                                     
-                                                    <a id="photoo" class="btn btn-success"> Zrób zdjęcie profilowe!</a>
-                                                                                  
-
-                                                    <div id="fotoContent" style="display: none;">
-                                                     <div id="my_camera" 
-                                                     style="width:320px; height:240px;">
-                                                     </div>
-                                                     <a class="form-group input-group"
-                                                     href="javascript:void(take_snapshot())">Zrób zdjęcie</a>                                                
-                                                     <div id="my_result">
-                                                     </div>
-                                                    </div>       
-                                                 
+                                    <div id="fotoContent" style="display: none;">
+                                     <div id="my_camera" 
+                                     style="width:320px; height:240px;">
+                                     </div>
+                                     <a class="form-group input-group"
+                                     href="javascript:void(take_snapshot())">Zrób zdjęcie</a>                                                
+                                     <div id="my_result">
+                                     </div>
+                                    </div>       
+                                         
                                 
 
     <script>
-
+            //Akcja po kliknieciu zrób zdjęcie w rejestracji
             $( "#photoo" ).on( "click", function() {
                 $('#forCanvas').html('<canvas id="_stage" width="1280" height="720" style="position:absolute;left:0px;top:0px; ">Your browser does not seem to support canvas elements.</canvas>');
                 initExample();
@@ -156,7 +149,7 @@
             };       
 
             
-
+            // Akcja bezpośrednio po wykonaniu zdjęcia 
             function take_snapshot() {
 
 
@@ -282,6 +275,8 @@
 
 
 <script>
+
+//Logowanie za pomocą kamery
 $('#switchLog2').click(function(){
     document.getElementById("fotoContent").style.display = "none";
      $('#services').html('<canvas id="_stage" width="700" height="400" style="position:absolute; left:0; z-index:0; float:left; margin:40px;">Your browser does not seem to support canvas elements.</canvas><div style="z-index:3; float:right; padding:20px; margin:20px;"><form id ="faceForm" action="/face" method="post" enctype="multipart/form-data"><input type="hidden" id="wsp1" name="wsp1" value=""><input type="hidden" id="wsp2" name="wsp2" value=""><input type="text" name="name" placeholder="Nazwa konta" style="padding:10px; margin:10px;" /></br> <input id="logIn" class="btn btn-success" value="Zaloguj się"></form></div>'
@@ -325,6 +320,8 @@ $( "#logIn" ).on( "click", function() {
 <script src="//cdnjs.cloudflare.com/ajax/libs/annyang/2.2.1/annyang.min.js"></script>
 <script>
 $(document).ready(function(){
+    
+    //Logowanie za pomocą metody głosowej
 
     $("#switchLog").click(function() {
       if (annyang) {

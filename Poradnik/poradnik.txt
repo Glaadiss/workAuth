@@ -1,0 +1,60 @@
+﻿Od strony technicznej:
+
+W folderze aplikacji znajduje się: 
+
+- folder node_modules 
+	
+	Moduły niezbędne do pracy serwera, sesji, zawierające ustawienia bazy 	danych itp.
+
+- folder public
+
+	Tutaj znajdują się pliki css oraz skrypty zajmujące się widokiem strony,
+	a także prawidłowym działaniem kamerki, oraz mikrofonu, do tego zapisywane 	tu są zdjęcia użytkowników
+
+- folder views 
+
+	W tym miejscu jest szablon dla stron www, oraz same strony tj. strona 
+	startowa oraz, strona do której mamy dostęp po zalogowaniu. W pliku 	index.handlebars znajduję się strona startowa. W pliku panel.handlebars, 	strona dla użytkowników zalogowanych
+
+- index.js 
+
+	„mózg aplikacji”, skrypt w którym zapisany jest nasz cały serwer.
+
+- package.json 
+	
+	lista modułów, które zostały dodatkowo dodane do serwera. 
+
+- port, Profcfile 
+
+	nieistotne pliki :)
+
+
+Aby włączyć lokalnie serwer, należy w terminalu, bądź „windowsowym cmd” przejść do katalogu z aplikacją i wpisać polecenie 'node index.js', następnie włączyć przeglądarkę i w miejscu na adres strony wpisać 'localhost:5000'. 
+
+
+Od strony użytkownika:
+
+
+Użytkownik wchodząc na stronę widzi dwie opcje do wyboru, rejestracje, lub logowanie.
+
+Po kliknięciu w przycisk rejestracji przeglądarka wyświetli nam panel rejestracyjny gdzie odpowiednio podać musimy:
+- nazwę na stronie,
+- adres zamieszkania,
+- prawidłowy adres email,
+- hasło składające się przynajmniej z sześciu znaków,
+
+Do tego jeżeli w przyszłości będziemy chcieli się logować za pomocą weryfikacji naszej twarzy, przed rejestracją musimy wykonać zdjęcie. W takowym celu musimy wybrać przycisk „Zrób zdjęcie profilowe”. Po chwili ukaże nam się pole wyświetlające  obraz naszej kamery, na którym powinniśmy widzieć swoją osobę. 
+W tym miejscu najlepiej ustawić się tak aby nasza głowa znajdowała się w centrum obrazu, poczekać chwilkę, by system odczytał cechy naszej twarzy i nacisnąć przycisk 'Zrób zdjęcie'. W tym momencie poniżej powinien pojawić się obrazek, który będzie przedstawiał nasze zdjęcie profilowe. Nie pozostaje nam nic innego jak wybranie przycisku 'Zarejestruj mnie!'. Po pomyślnej weryfikacji naszych danych system zwróci kod Pin, który będzie nam służył do logowania z udziałem głosu. 
+
+
+Gdy wybierzemy przycisk logowania, naszym oczom ukaże się panel z możliwością zwykłego zalogowania się, lecz mamy także do dyspozycji dwa inne narzędzia.
+
+-'Zaloguj się poprzez komendę głosową' – Po kliknięciu nie pozostanie nam nic innego jak wypowiedzenie na głos do mikrofonu pojedynczo wszystkich cyfr z kodu pin, który otrzymaliśmy podczas rejestracji np. otrzymaliśmy kod 3382, więc do mikrofonu musimy powiedzieć ' trzy trzy osiem dwa '. Po pomyślnej weryfikacji zostaniemy zalogowani. 
+
+- 'Zaloguj się poprzez weryfikację twarzy ' - Po kliknięciu ukaże nam się biały ekran z możliwością wpisania nazwy i Kliknięcia przycisku zaloguj, jednak po chwili zobaczymy obraz naszej kamerki dodatkowo z wychwyconymi punktami na naszej głowie. W tym miejscu musimy poczekać, aż obraz załaduje się prawidłowo wpisać nazwę konta i wcisnąć przycisk potwierdzający, a system zweryfikuje czy przed kamerą znajduje się ta sama postać z zdjęcia podanego podczas rejestracji. 
+
+
+Po pierwszym zalogowaniu wyświetli nam się zestaw dziesięciu pytań. Po skończeniu ankiety zostaniemy przydzieleni do grupy użytkowników. Każda z grup posiada inną treść dostępną po zalogowaniu na swoje konto. 
+
+	
+	
