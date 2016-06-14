@@ -1,35 +1,4 @@
-   <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-     <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand page-scroll" href="#page-top">Witaj {{email}}</a>
-        </div>
-            <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse navbar-ex1-collapse">
-        <ul class="nav navbar-nav">
-        <!-- Hidden li included to remove active class from about link when scrolled up past about section -->
-            <li class="hidden">
-                <a class="page-scroll" href="#page-top"></a>
-
-            </li>
-                <a class="navbar-brand" href="/logout"> Wyloguj </a>
-                <a class="navbar-brand" href="/panel"> start </a>
-                <a class="navbar-brand" href="/strona1"> 111 </a>
-                <a class="navbar-brand" href="/strona2"> 222 </a>
-                <a class="navbar-brand" href="/strona3"> 333 </a>
-                <a class="navbar-brand" href="/strona4"> 444 </a>
-        </ul>
-    </div>
-    <!-- /.navbar-collapse -->
-    </div>
-    <!-- /.container -->
-    </nav>
-
+{{> nav}}
    <section class="intro-section" style="padding-top:150px">
         <div class="container">
             <div class="row">
@@ -39,123 +8,79 @@
                 {{/if}}
                 
                  {{#if result}}
-                <form action="/p" method="post" enctype="multipart/form-data">    
-                       <div class="juma-quiz">
-                            <ol id="my-quiz">
-                                <li data-question="1">
-                                <h3>1. Czy korzystanie z komputera sprawia Panu/Pani trudność?</h3>
-                                    <ul>
-                                    <li data-points="1">Tak.</li>
-                                    <li data-points="0">Nie. </li>
-                                    </ul>
-                                </li>
-                                <li data-question="2">
-                                <h3>2. Czy przeważnie korzysta Pani/Pan z komputera z pomocą innej osoby?</h3>
-                                    <ul>
-                                    <li data-points="1">Tak.</li>
-                                    <li data-points="0">Nie. </li>
-                                    </ul>
-                                </li>
-                                <li data-question="3">
-                                <h3>3. Czy poza standardowym wyposażeniem komputera (mysz, klawiatura, monitor) używa Pan/Pani dodatkowego narzędzia – czujnika gałek ocznych?</h3>
-                                    <ul>
-                                    <li data-points="1">Tak.</li>
-                                    <li data-points="0">Nie. </li>
-                                    </ul>
-                                </li>
-                                <li data-question="4">
-                                <h3>4. Czy porusza się Pan/Pani z pomocą osób trzecich?</h3>
-                                    <ul>
-                                    <li data-points="1">Tak.</li>
-                                    <li data-points="0">Nie. </li>
-                                    </ul>
-                                </li>
-                                <li data-question="5">
-                                <h3>5. Czy wykazuje Pan/Pani zaburzenie zdolności rozpoznawania barw?</h3>
-                                    <ul>
-                                    <li data-points="1">Tak.</li>
-                                    <li data-points="0">Nie. </li>
-                                    </ul>
-                                </li>
-                                <li data-question="6">
-                                <h3>6. Czy nosi Pan/Pani okulary i przejawia wadę wzroku?</h3>
-                                    <ul>
-                                    <li data-points="1">Tak.</li>
-                                    <li data-points="0">Nie. </li>
-                                    </ul>
-                                </li>
-                                <li data-question="7">
-                                <h3>7. Czy ma Pan/Pani trudność w rozpoznawaniu obiektów, rzeczy - wynikającą z wady wzroku?</h3>
-                                    <ul>
-                                    <li data-points="1">Tak.</li>
-                                    <li data-points="0">Nie. </li>
-                                    </ul>
-                                </li>
-                                <li data-question="8">
-                                <h3>8. Czy cierpi Pan/Pani na dysfunkcje słuchu?</h3>
-                                    <ul>
-                                    <li data-points="1">Tak.</li>
-                                    <li data-points="0">Nie. </li>
-                                    </ul>
-                                </li>
-                                <li data-question="9">
-                                <h3>9. Czy standardowe przeglądanie treści w Internecie zmusza Pana/Panią do wytężonego działania zmysłu wzroku?</h3>
-                                    <ul>
-                                    <li data-points="1">Tak.</li>
-                                    <li data-points="0">Nie. </li>
-                                    </ul>
-                                </li>
-                                <li data-question="10">
-                                <h3>10. Czy kiedykolwiek musiał Pan/Pani korzystać z pomocy innej osoby przy próbie zalogowania do często korzystanego serwisu www?</h3>
-                                    <ul>
-                                    <li data-points="1">Tak.</li>
-                                    <li data-points="0">Nie. </li>
-                                    </ul>
-                                </li>
-                            </ol>
-                            <ul class="juma-score">
-                                <li>
-                                    <input type="hidden" id="pkt" name="points" value="">
-                                </li>
-                            </ul>
-                        </div>
-                    </form> 
-                    {{/if}}              
-                                    
 
+                 <script>
+                    function callback(){
+                        var audio = new Audio('../pytania/1.m4a');
+                        audio.play();    
+                    }
+
+                    var audio = new Audio('../pytania/komentarz.m4a');
+                    audio.play();
+
+                    setTimeout(function(){
+                        $('.juma-quiz').css('visibility', 'visible')
+                        callback();
+                    },30000)
+
+                                   
+                 </script>
+                    
+                    {{> form}}
+                                 
+                                    
+                    {{else}}
+                    
+                    {{#if bad  }}
+                        {{> page2}}
+                    {{/if}}
+                    {{#if middle }}
+                        {{> page2}}
+                    {{/if}}                   
+                    {{#if good}}
+                        <div class="col-md-2"> 
+                            </br></br>
+                            <a class="btn btn-success btn-lg" style="width: 200px" href="/panel" > Start </a> </br></br>
+                            <a class="btn btn-success btn-lg" style="width: 200px"  href="/strona1" > Cyfry </a> </br></br>
+                            <a class="btn btn-success btn-lg" style="width: 200px" href="/strona2" > Webusability </a> </br></br>
+                            <a class="btn btn-success btn-lg" style="width: 200px" href="/strona3"> Wybitności </a> </br></br>
+                        </div>
+                    {{/if}}
+
+                    <div class="col-md-10"> 
+                        <div class="col-md-1"></div>
+                        <div class="col-md-9">
+
+                            <a class="navbar-brand" style="color: black; font-size: 2em;" onclick="resizeText(1)" href="#"> <span onclick="resizeText(1)" class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span> </a>
+                            <a class="navbar-brand" style="color: black; font-size: 2em;" onclick="resizeText(-1)" href="#"> <span class="glyphicon glyphicon-zoom-out" aria-hidden="true"></span> </a>   
+                            <a class="navbar-brand" style="color: black; font-size: 2em;" onclick="contrast()" href="#"> <span class="glyphicon glyphicon-adjust" aria-hidden="true"></span> </a>   
+
+                            </br></br>
+                            </br></br>
+                            <div class="row" id="read">
+                                <p> Niepełnosprawność nie zawsze oznacza walkę ze straconej pozycji. Jak uczy historia na świecie ludzie niepełnosprawni potrafili odnosić sukcesy, a tym samym zapisywali się pozytywnie na kartach dziejów. Od starożytności po czasy współczesne. Wspominając władców; cesarza rzymskiego Klaudiusza, cara Rusi Fiodora II Aleksiejewicza Romanowa, czy prezydenta Stanów Zjednoczonych Franklina Delano Roosvelta.</p>
+                                </br>
+                                <p> Oprócz wielkich przywódców na uwagę zasługują również uzdolnieni niepełnosprawni artyści, którzy swoimi dziełami, oraz całą działalnością są zapamiętani na zawsze. Homer jako twórca starożytny, był ślepcem. Nie przeszkadzało mu to jednak w stworzeniu wybitnych dzieł takich jak Iliada czy Odyseja. Jednym ze znanych artystów niepełnosprawnych był również Ludwig van Beethoven, prekursor romantyzmu w muzyce oraz wielki kompozytor i pianista. Mimo tego, że stracił słuch, ciągle tworzył. Takim przedstawicielem XX i XXI wieku był Ray Charles. Niewidomy muzyk ze Stanów Zjednoczonych, całkowicie stracił wzrok w wieku 6 lat. Był wybitnym artystą, który w życiu odniósł wiele sukcesów.</p>
+                                </br>
+                                <p> Poza artystami również niepełnosprawni sportowcy napawają optymizmem, udowadniając, że mimo przeszkód można robić coś niezwykłego. Jako przykład niech posłuży Polka, Natalia Partyka. Bez prawej dłoni i przedramienia rywalizuje na światowym poziomie z osobami w pełni sprawnymi. Znany biegacz Oscar Pistorius jest również przykładem, że można wygrywać i ustanawiać niesamowite rekordy mimo braku obu nóg.</p>
+                                </br>
+                                <p>W dziedzinie nauki jednym z najwybitniejszych umysłów jest profesor Stephen Hawking, cierpiący na paraliż większości ciała. Ponadto doktor Temple Grandin jest doskonałym przykładem, ze mimo autyzmu, świetnie radzi sobie w świecie nauki.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            {{#if bad}}
+                            <input type="hidden" value="../pytania/wybitnosci.m4a" id="from_this" />
+                             <a class="navbar-brand" style="color: black; font-size: 2em;" onclick="read()" href="#"> <span class="glyphicon glyphicon-volume-up" aria-hidden="true"></span> </a> 
+                            {{/if}}
+                        </div>    
+                    </div>
+
+
+                    {{/if}} 
+                
                                      
                       
-                     {{#if good}}
 
-                        <!-- Treść dla osoby sprawnej !! -->
-                        <h1> Osoba pełnosprawna</h1>
-                        <img src="{{avatar}}" alt=" Twój avatar ">
-
-
-
-                    {{/if}} 
-
-                     {{#if middle}}
-
-                        <!--  Treść dla osoby z pewną niepełnosprawnością -->
-
-                        <h1> osoba lekko niepełnosprawna </h1>
-                        <img src="{{avatar}}" alt=" Twój avatar ">
-
-
-                    {{/if}} 
-                    
-                     {{#if bad}}
-
-                        <!-- Treść dla osoby niepełnosprawnej  -->
-                            
-
-                        <h1> osoba całkowicie niepełnosprawna </h1>
-                        <img src="{{avatar}}" alt=" Twój avatar ">
-
-
-
-                    {{/if}} 
                       
                     <br>
                    
@@ -164,3 +89,57 @@
         </div>
     </section>
 
+
+{{#if result}}
+<script src="//cdnjs.cloudflare.com/ajax/libs/annyang/2.2.1/annyang.min.js"></script>
+   
+
+
+<script>
+
+
+
+$(document).ready(function(){
+    
+    //odpowiadanie annyang
+    if (annyang) {
+    
+    annyang.setLanguage('pl');
+    //zdefiniowanie komendy
+    var commands = {
+        '*val': function(val) { 
+            var pin = val;
+            pin = pin.replace(/\s+/g, '');
+            if(pin == "tak"){
+                $('.yes').click();
+                $('.juma-forward').click();
+            }
+            if(pin =="nie"){
+                $('.no').click();
+                $('.juma-forward').click();
+            }
+
+
+        }
+    };
+
+
+    // Dodanie komend do annyang
+    annyang.addCommands(commands);
+
+    annyang.debug();
+    // start nasłuchwiania
+    annyang.start();
+    }
+    else{
+        console.log('annyag nie dziala');
+    }
+});
+
+
+
+</script>
+
+{{/if}} 
+
+<script src="../js/script.js"></script> 

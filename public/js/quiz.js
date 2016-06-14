@@ -16,7 +16,7 @@
             progress: true
         },
         ques,
-        audio,
+        audio = new Audio(),
         forward,
         answers,
         cur_ques,
@@ -101,7 +101,7 @@
 
                 } else {
                     var n = $(ques + '.active').data('question') + 1;
-                    audio = new Audio;
+                    
                     audio.currentTime = 300;
                     audio = new Audio('../pytania/'+ n +'.m4a');
                     audio.play(); 

@@ -1,35 +1,4 @@
-   <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-     <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand page-scroll" href="#page-top">Witaj {{email}}</a>
-        </div>
-            <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse navbar-ex1-collapse">
-        <ul class="nav navbar-nav">
-        <!-- Hidden li included to remove active class from about link when scrolled up past about section -->
-            <li class="hidden">
-                <a class="page-scroll" href="#page-top"></a>
-
-            </li>
-                <a class="navbar-brand" href="/logout"> Wyloguj </a>
-                <a class="navbar-brand" href="/panel"> start </a>
-                <a class="navbar-brand" href="/strona1"> 111 </a>
-                <a class="navbar-brand" href="/strona2"> 222 </a>
-                <a class="navbar-brand" href="/strona3"> 333 </a>
-                <a class="navbar-brand" href="/strona4"> 444 </a>
-        </ul>
-    </div>
-    <!-- /.navbar-collapse -->
-    </div>
-    <!-- /.container -->
-    </nav>
-
+{{> nav}}
    <section class="intro-section" style="padding-top:150px">
         <div class="container">
             <div class="row">
@@ -39,123 +8,85 @@
                 {{/if}}
                 
                  {{#if result}}
-                <form action="/p" method="post" enctype="multipart/form-data">    
-                       <div class="juma-quiz">
-                            <ol id="my-quiz">
-                                <li data-question="1">
-                                <h3>1. Czy korzystanie z komputera sprawia Panu/Pani trudność?</h3>
-                                    <ul>
-                                    <li data-points="1">Tak.</li>
-                                    <li data-points="0">Nie. </li>
-                                    </ul>
-                                </li>
-                                <li data-question="2">
-                                <h3>2. Czy przeważnie korzysta Pani/Pan z komputera z pomocą innej osoby?</h3>
-                                    <ul>
-                                    <li data-points="1">Tak.</li>
-                                    <li data-points="0">Nie. </li>
-                                    </ul>
-                                </li>
-                                <li data-question="3">
-                                <h3>3. Czy poza standardowym wyposażeniem komputera (mysz, klawiatura, monitor) używa Pan/Pani dodatkowego narzędzia – czujnika gałek ocznych?</h3>
-                                    <ul>
-                                    <li data-points="1">Tak.</li>
-                                    <li data-points="0">Nie. </li>
-                                    </ul>
-                                </li>
-                                <li data-question="4">
-                                <h3>4. Czy porusza się Pan/Pani z pomocą osób trzecich?</h3>
-                                    <ul>
-                                    <li data-points="1">Tak.</li>
-                                    <li data-points="0">Nie. </li>
-                                    </ul>
-                                </li>
-                                <li data-question="5">
-                                <h3>5. Czy wykazuje Pan/Pani zaburzenie zdolności rozpoznawania barw?</h3>
-                                    <ul>
-                                    <li data-points="1">Tak.</li>
-                                    <li data-points="0">Nie. </li>
-                                    </ul>
-                                </li>
-                                <li data-question="6">
-                                <h3>6. Czy nosi Pan/Pani okulary i przejawia wadę wzroku?</h3>
-                                    <ul>
-                                    <li data-points="1">Tak.</li>
-                                    <li data-points="0">Nie. </li>
-                                    </ul>
-                                </li>
-                                <li data-question="7">
-                                <h3>7. Czy ma Pan/Pani trudność w rozpoznawaniu obiektów, rzeczy - wynikającą z wady wzroku?</h3>
-                                    <ul>
-                                    <li data-points="1">Tak.</li>
-                                    <li data-points="0">Nie. </li>
-                                    </ul>
-                                </li>
-                                <li data-question="8">
-                                <h3>8. Czy cierpi Pan/Pani na dysfunkcje słuchu?</h3>
-                                    <ul>
-                                    <li data-points="1">Tak.</li>
-                                    <li data-points="0">Nie. </li>
-                                    </ul>
-                                </li>
-                                <li data-question="9">
-                                <h3>9. Czy standardowe przeglądanie treści w Internecie zmusza Pana/Panią do wytężonego działania zmysłu wzroku?</h3>
-                                    <ul>
-                                    <li data-points="1">Tak.</li>
-                                    <li data-points="0">Nie. </li>
-                                    </ul>
-                                </li>
-                                <li data-question="10">
-                                <h3>10. Czy kiedykolwiek musiał Pan/Pani korzystać z pomocy innej osoby przy próbie zalogowania do często korzystanego serwisu www?</h3>
-                                    <ul>
-                                    <li data-points="1">Tak.</li>
-                                    <li data-points="0">Nie. </li>
-                                    </ul>
-                                </li>
-                            </ol>
-                            <ul class="juma-score">
-                                <li>
-                                    <input type="hidden" id="pkt" name="points" value="">
-                                </li>
-                            </ul>
-                        </div>
-                    </form> 
-                    {{/if}}              
-                                    
 
+                 <script>
+                    function callback(){
+                        var audio = new Audio('../pytania/1.m4a');
+                        audio.play();    
+                    }
+
+                    var audio = new Audio('../pytania/komentarz.m4a');
+                    audio.play();
+
+                    setTimeout(function(){
+                        $('.juma-quiz').css('visibility', 'visible')
+                        callback();
+                    },30000)
+
+                                   
+                 </script>
+                    
+                    {{> form}}
+                                 
+                                    
+                    {{else}}
+
+                    {{#if bad  }}
+                        {{> page2}}
+                    {{/if}}
+                    {{#if middle }}
+                        {{> page2}}
+                    {{/if}}                   
+                    {{#if good}}
+                        <div class="col-md-2"> 
+                            </br></br>
+                            <a class="btn btn-success btn-lg" style="width: 200px" href="/panel" > Start </a> </br></br>
+                            <a class="btn btn-success btn-lg" style="width: 200px"  href="/strona1" > Cyfry </a> </br></br>
+                            <a class="btn btn-success btn-lg" style="width: 200px" href="/strona2" > Webusability </a> </br></br>
+                            <a class="btn btn-success btn-lg" style="width: 200px" href="/strona3"> Wybitności </a> </br></br>
+                        </div>
+                    {{/if}}
+
+                    <div class="col-md-10"> 
+                        <div class="col-md-1"></div>
+                        <div class="col-md-9">
+
+                            <a class="navbar-brand" style="color: black; font-size: 2em;" onclick="resizeText(1)" href="#"> <span onclick="resizeText(1)" class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span> </a>
+                            <a class="navbar-brand" style="color: black; font-size: 2em;" onclick="resizeText(-1)" href="#"> <span class="glyphicon glyphicon-zoom-out" aria-hidden="true"></span> </a>   
+                            <a class="navbar-brand" style="color: black; font-size: 2em;" onclick="contrast()" href="#"> <span class="glyphicon glyphicon-adjust" aria-hidden="true"></span> </a>   
+
+                            </br></br>
+                            </br></br>
+                            <div class="row" id="read">
+                                <p> W Polsce mieszka 38 milionów ludzi.  Jak wynika z powszechnego spisu ludności 16% Polaków to osoby prawnie niepełnosprawne, co daje liczbę 6,2 miliona. Niepełnosprawnych prawnie w wieku 16 lat i więcej jest w Polsce 3,4 miliona. Co ciekawe, w roku 1997 liczba ta wynosiła 4,6 miliona. Najczęstszą przyczyną niepełnosprawności stanowiły uszkodzenia i choroby narządów ruchu – 58,8%. Schorzenia układu krążenia obejmują 49,6%, schorzenia neurologiczne 33%. Uszkodzenia i choroby wzroku obejmują 27,3% niepełnosprawnych. Warto dodać, że udział procentowy osób z uszkodzeniami i chorobami narządu słuchu wynosi 13,7%. Ponadto niepełnosprawni cierpiący na chorobę psychiczną i upośledzenie umysłowe stanowią kolejno 10,1% oraz 4%. </p>
+                                <br>
+                                <p>Wykształcenie osób niepełnosprawnych prawnie w wieku 16 lat i powyżej przedstawia poniższy diagram:</p>
+                                <br>
+                                <img src="../images/wykres.jpg" alt="wykres" width="100%"> 
+                                </br>
+                                <small> <i> Źródło: BAEL GUS; Dane w latach 2008-2009  - na podstawie NSP 2002, dane w latach 2010 - 2012 – na podstawie NSP 2011.</i></small>
+                                
+                                <br><br>
+                                <p> Wynika z tego, że w roku 2012 niepełnosprawnych z wykształceniem wyższym było 7,5%. Wykształcenie policealne i średnie zawodowe w tym samym roku miało 20,3% osób. Wysoki wynik procentowy mają niepełnosprawni z wykształceniem gimnazjalnym i poniżej, który wynosił w 2012 roku 32,8% – jedną z przyczyn takie stanu rzeczy może być fakt ich niezdolności do nauki.</p>
+
+                                <p>Jak podaje Światowa Organizacja Zdrowia, na świecie jest niemal miliard ludzi niepełnosprawnych. Stanowi to około 15% całej populacji. Około 200milionów osób jest dotknięte niepełnosprawnością w stopniu ciężkim. Te smutne dane, otwierają pogląd na pewną sprawę, o której często zapominają twórcy serwisów internetowych. Ważnym klientem Internetu jest człowiek niepełnosprawny, w związku z tym należy ułatwić mu dostęp do treści stosując się do zasad Web Usability, o których szerzej w następnej zakładce.</p>
+
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            {{#if bad}}
+                            <input type="hidden" value="../pytania/cyfry.m4a" id="from_this" />
+                             <a class="navbar-brand" style="color: black; font-size: 2em;" onclick="read()" href="#"> <span class="glyphicon glyphicon-volume-up" aria-hidden="true"></span> </a> 
+                            {{/if}}
+                        </div>    
+                    </div>
+
+
+                    {{/if}} 
+                
                                      
                       
-                     {{#if good}}
 
-                        <!-- Treść dla osoby sprawnej !! -->
-                        <h1> Osoba pełnosprawna</h1>
-                        <img src="{{avatar}}" alt=" Twój avatar ">
-
-
-
-                    {{/if}} 
-
-                     {{#if middle}}
-
-                        <!--  Treść dla osoby z pewną niepełnosprawnością -->
-
-                        <h1> osoba lekko niepełnosprawna </h1>
-                        <img src="{{avatar}}" alt=" Twój avatar ">
-
-
-                    {{/if}} 
-                    
-                     {{#if bad}}
-
-                        <!-- Treść dla osoby niepełnosprawnej  -->
-                            
-
-                        <h1> osoba całkowicie niepełnosprawna </h1>
-                        <img src="{{avatar}}" alt=" Twój avatar ">
-
-
-
-                    {{/if}} 
                       
                     <br>
                    
@@ -164,3 +95,57 @@
         </div>
     </section>
 
+
+{{#if result}}
+<script src="//cdnjs.cloudflare.com/ajax/libs/annyang/2.2.1/annyang.min.js"></script>
+   
+
+
+<script>
+
+
+
+$(document).ready(function(){
+    
+    //odpowiadanie annyang
+    if (annyang) {
+    
+    annyang.setLanguage('pl');
+    //zdefiniowanie komendy
+    var commands = {
+        '*val': function(val) { 
+            var pin = val;
+            pin = pin.replace(/\s+/g, '');
+            if(pin == "tak"){
+                $('.yes').click();
+                $('.juma-forward').click();
+            }
+            if(pin =="nie"){
+                $('.no').click();
+                $('.juma-forward').click();
+            }
+
+
+        }
+    };
+
+
+    // Dodanie komend do annyang
+    annyang.addCommands(commands);
+
+    annyang.debug();
+    // start nasłuchwiania
+    annyang.start();
+    }
+    else{
+        console.log('annyag nie dziala');
+    }
+});
+
+
+
+</script>
+
+{{/if}} 
+
+<script src="../js/script.js"></script> 

@@ -213,21 +213,7 @@ app.get('/strona3', requireLogin,  function(req,res){
 		goodNotice ='';	
 })
 
-app.get('/strona4', requireLogin,  function(req,res){
-		var wynik = quizWynik(req.session.user.quiz);
-			// WYświetlenie widoku panelu dla zalogowanych
-		res.render(strona4, {
-			avatar: req.session.user.avatar,
-			email: req.session.user.email,
-			result: wynik.czyQuiz,
-			good: wynik.good,
-			middle: wynik.middle,
-			bad: wynik.bad,
-			notice: notice
-		});
-		notice = '';
-		goodNotice ='';	
-})
+
 
 
 		// Przesłanie do bazy wyniku quizu
