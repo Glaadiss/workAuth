@@ -14,6 +14,10 @@ var sessions = require('client-sessions');
 var bcrypt = require('bcryptjs');
 		// ścieżka do strony dla zalogowanych
 var panel  = __dirname+'/views/panel';
+var strona1  = __dirname+'/views/strona1';
+var strona2  = __dirname+'/views/strona2';
+var strona3  = __dirname+'/views/strona3';
+var strona4  = __dirname+'/views/strona4';
 		// wartości przechowujące powiadomienia dla użytkowników
 var notice = '';
 var goodNotice ='';
@@ -39,10 +43,10 @@ mongoose.connect(uristring, function (err, res) {
 var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
 var User = mongoose.model('User', new Schema({
-	email: {type: String, unique: true},
+	email: {type: String},
 	passwd: String,
 	pin: String,
-	name: {type: String, unique: true},
+	name: {type: String},
 	adres: String, 
 	avatar: String,
 	quiz: String,
@@ -120,9 +124,8 @@ app.get('/',function(req, res){
     
   });	
 
-		// Strona dostępna po zalogowaniu
-app.get('/panel', requireLogin,  function(req,res){
-		var quiz = req.session.user.quiz;
+function quizWynik(quiz){
+
 		var czyQuiz = false;
 		var bad = false;
 		var middle = false;
@@ -140,19 +143,93 @@ app.get('/panel', requireLogin,  function(req,res){
 			bad = true;
 		}
 
+		return {czyQuiz: czyQuiz, bad: bad, middle: middle, good:good };
+
+}
+
+
+		// Strona dostępna po zalogowaniu
+app.get('/panel', requireLogin,  function(req,res){
+		var wynik = quizWynik(req.session.user.quiz);
 			// WYświetlenie widoku panelu dla zalogowanych
 		res.render(panel, {
 			avatar: req.session.user.avatar,
 			email: req.session.user.email,
-			result: czyQuiz,
-			good: good,
-			middle: middle,
-			bad: bad,
+			result: wynik.czyQuiz,
+			good: wynik.good,
+			middle: wynik.middle,
+			bad: wynik.bad,
 			notice: notice
 		});
 		notice = '';
 		goodNotice ='';	
 })	
+
+app.get('/strona1', requireLogin,  function(req,res){
+		var wynik = quizWynik(req.session.user.quiz);
+			// WYświetlenie widoku panelu dla zalogowanych
+		res.render(strona1, {
+			avatar: req.session.user.avatar,
+			email: req.session.user.email,
+			result: wynik.czyQuiz,
+			good: wynik.good,
+			middle: wynik.middle,
+			bad: wynik.bad,
+			notice: notice
+		});
+		notice = '';
+		goodNotice ='';	
+})	
+
+app.get('/strona2', requireLogin,  function(req,res){
+		var wynik = quizWynik(req.session.user.quiz);
+			// WYświetlenie widoku panelu dla zalogowanych
+		res.render(strona2, {
+			avatar: req.session.user.avatar,
+			email: req.session.user.email,
+			result: wynik.czyQuiz,
+			good: wynik.good,
+			middle: wynik.middle,
+			bad: wynik.bad,
+			notice: notice
+		});
+		notice = '';
+		goodNotice ='';	
+})
+
+app.get('/strona3', requireLogin,  function(req,res){
+		var wynik = quizWynik(req.session.user.quiz);
+			// WYświetlenie widoku panelu dla zalogowanych
+		res.render(strona3, {
+			avatar: req.session.user.avatar,
+			email: req.session.user.email,
+			result: wynik.czyQuiz,
+			good: wynik.good,
+			middle: wynik.middle,
+			bad: wynik.bad,
+			notice: notice
+		});
+		notice = '';
+		goodNotice ='';	
+})
+
+app.get('/strona4', requireLogin,  function(req,res){
+		var wynik = quizWynik(req.session.user.quiz);
+			// WYświetlenie widoku panelu dla zalogowanych
+		res.render(strona4, {
+			avatar: req.session.user.avatar,
+			email: req.session.user.email,
+			result: wynik.czyQuiz,
+			good: wynik.good,
+			middle: wynik.middle,
+			bad: wynik.bad,
+			notice: notice
+		});
+		notice = '';
+		goodNotice ='';	
+})
+
+
 		// Przesłanie do bazy wyniku quizu
 app.post('/p', function(req,res){
 	var points = req.body.points;

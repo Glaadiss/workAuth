@@ -7,6 +7,7 @@
  */
 
 
+
 (function ($, window, document) {
     "use strict";
     var pluginName = 'jumaQuiz',
@@ -15,6 +16,7 @@
             progress: true
         },
         ques,
+        audio,
         forward,
         answers,
         cur_ques,
@@ -36,7 +38,6 @@
 
         this._defaults = defaults;
         this._name = pluginName;
-
         this.init();
     }
 
@@ -73,6 +74,7 @@
                 answers.removeClass('juma-choice');
                 forward.attr("disabled", "disabled");
                 cur_ques = $(ques + '.active').data('question');
+                console.log(cur_ques);
                 forward.removeAttr("disabled");
                 $(this).addClass('juma-choice');
             });
@@ -80,6 +82,7 @@
             forward.click(function () {
                 tmp_points[cur_ques] = $('.juma-choice').data('points');
                 points += tmp_points[cur_ques];
+                console.log(tmp_points[cur_ques]);
                 cur_ques = $(ques + '.active');
                 if (cur_ques.is(':last-child')) {
                     alert('Uzyskałeś ' + points + ' punktów.');
@@ -97,6 +100,11 @@
                     }
 
                 } else {
+                    var n = $(ques + '.active').data('question') + 1;
+                    audio = new Audio;
+                    audio.currentTime = 300;
+                    audio = new Audio('../pytania/'+ n +'.m4a');
+                    audio.play(); 
                     $(ques).removeClass('active');
                     (cur_ques).next('li').addClass('active');
                     forward.attr("disabled", "disabled");
