@@ -4,7 +4,7 @@
  ============================================================ */
 body {
     font-family: 'Open Sans', sans-serif;
-   
+    margin-bottom: 100px;
 }
 
 .pad-top {
@@ -12,6 +12,25 @@ body {
 }
 
 #read p{
+    line-height: 30px;
     text-indent: 40px;
     text-align: justify;
+}
+
+.niceCursor{
+    cursor: url("../images/glass.png") 60 50, auto;
+}
+#read span:hover {
+    background-color: #fff;
+    box-shadow: -5px -5px 30px rgba(255, 255, 255, .7) inset, 5px 5px 20px rgba(0, 0, 0, .3) inset, 10px 10px 25px rgba(0, 0, 0, .1);
+    width: 200px;
+    height: 200px;
+    border-radius: 100%;
+    -webkit-transition: opacity .2s;
+    -moz-transition: opacity .2s;
+    -o-transition: opacity .2s;
+    transition: opacity .2s;
+    font-size: 26px;
+    padding: 10px;
+    
 }

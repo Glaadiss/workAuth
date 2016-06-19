@@ -1,3 +1,9 @@
+
+
+
+
+
+
 function resizeText(multiplier) {
   if (document.body.style.fontSize == "") {
     document.body.style.fontSize = "1.0em";
@@ -69,3 +75,32 @@ function read(){
   }
 
 }
+
+
+var zoom = false;
+var par = $('#read p').html();
+
+function lupa(){
+  if(zoom){
+    $('#read p').removeClass('niceCursor');
+    $('#read p').html(par);
+    $('#demo').html($('#demo').html());
+    zoom = false;
+  }
+  else{
+    $('#read p').addClass('niceCursor');
+    $("#demo").evenZoom();
+    var res = par.split(" ");
+    var str = '';
+    for (i in res){
+      var k = '<span>' + res[i] + '</span> ';
+      str+=k;
+    }
+    $('#read p').html(str);  
+    zoom = true; 
+  }
+}
+
+
+
+
